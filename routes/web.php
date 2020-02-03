@@ -12,5 +12,11 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return 'Hello world';
+});
+
+
+$router->group(['prefix' => 'api/v1'], function() use ($router) {
+    $router->get('questions', 'QuestionsController@all');
+    $router->post('questions', 'QuestionsController@add');
 });
