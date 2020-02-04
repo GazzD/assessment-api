@@ -1,21 +1,26 @@
 Assessment API 
 ====================
-Assesment API with multiple data source that handle two different resources :
+Assesment API made in Lumen with multiple data sources to handle two different resources :
 
 - Multiple-choice questions 
 - Choices related to a question
 
 ---
 
+ - **[Requierements](#requirements)**
  - **[Installation](#installation)**
  - **[Endpoints](#endpoints)**
 
- 
+## Requirements 
+- PHP >= 7.2
+- OpenSSL PHP Extension
+- PDO PHP Extension
+- Mbstring PHP Extension
 
 ## Installation
 
 - composer install
-- rename .env-example to .env
+- rename .env.example to .env
 - run server (example php -S localhost:8000 -t public)
 
 ## Endpoints
