@@ -20,4 +20,8 @@ Assesment API with multiple data source that handle two different resources :
 
 ## Endpoints
 
-- Endpoints are defined in open-api.yaml
+Endpoints are defined in open-api.yaml
+
+    - Examples:
+        - [GET] localhost:8000/api/v1/questions
+        - [POST] localhost:8000/api/v1/questions
