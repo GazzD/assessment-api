@@ -1,0 +1,67 @@
+openapi: 3.0.1
+info:
+    title: Assessment API
+    description: 'Assessment API'
+    version: v1
+
+paths:
+    /questions:
+        get:
+            summary: Returns the list of translated questions and associated choices
+            parameters:
+              - in: query
+                required: true
+                name: lang
+                schema:
+                  type: string
+                description: Language (ISO-639-1 code) in which the questions and choices should be translated
+            responses:
+                200:
+                    description: List of translated questions and associated choices
+                    content:
+                      application/json:
+                        schema:
+                          $ref: '#/components/schemas/QuestionList'
+        post:
+            summary: Creates a new question and associated choices (the number of associated choices must be exactly equal to 3)
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Question'
+            responses:
+                200:
+                    description: Question and associated choices (not translated)
+                    content:
+                      application/json:
+                        schema:
+                          $ref: '#/components/schemas/Question'
+components:
+    schemas:
+        QuestionList:
+            type: object
+            properties:
+                data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+        Question:
+            type: object
+            properties:
+                text:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+                    description: Creation date of the question
+                choices:
+                    type: array
+                    description: Choices associated to the question
+                    items:
+                      $ref: '#/components/schemas/Choice'
+        Choice:
+            type: object
+            properties:
+                text:
+                    type: string
