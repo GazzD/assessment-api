@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
 
@@ -52,7 +49,7 @@ class QuestionsController extends Controller
         $questions = $this->getContentData(self::DATA_FILE_NAME, self::DATA_EXTENSION);
 
         // Iterate questions to get text to be translated
-        $separator = '|||';
+        $separator = ' |||| ';
         $translateText = '';
         foreach ($questions as $i => $question) {
 
@@ -65,8 +62,11 @@ class QuestionsController extends Controller
             $translateText.=$question['text'].$separator;
         }
 
+        // Remove las separator
+        $translateText = rtrim($translateText, $separator);
+
         // Translate all text
-        $translateText = $translator->translate($translateText);
+        $translateText = $translateText!=''?$translator->translate($translateText):$translateText;
         $translatedTexts = explode($separator, $translateText);
 
         $translatedIndex = 0;
@@ -77,12 +77,10 @@ class QuestionsController extends Controller
             // Iterate over choices
             foreach ($question['choices'] as $j => $choice) {
                 // Translate choice text
-                $questions[$i]['choices'][$j]['text'] = $translatedTexts[$translatedIndex];
-                $translatedIndex++;
+                $questions[$i]['choices'][$j]['text'] = $translatedTexts[$translatedIndex++];
             }
             // Translate question text
-            $questions[$i]['text'] = $translatedTexts[$translatedIndex];
-            $translatedIndex++;
+            $questions[$i]['text'] = $translatedTexts[$translatedIndex++];
         }
 
         return response()->json($questions, Response::HTTP_OK);
