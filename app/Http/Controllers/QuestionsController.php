@@ -51,16 +51,38 @@ class QuestionsController extends Controller
         // Get content data
         $questions = $this->getContentData(self::DATA_FILE_NAME, self::DATA_EXTENSION);
 
+        // Iterate questions to get text to be translated
+        $separator = '|||';
+        $translateText = '';
+        foreach ($questions as $i => $question) {
+
+            // Iterate over choices
+            foreach ($question['choices'] as $j => $choice) {
+                // Get choice text
+                $translateText.=$choice['text'].$separator;
+            }
+            // Get question text
+            $translateText.=$question['text'].$separator;
+        }
+
+        // Translate all text
+        $translateText = $translator->translate($translateText);
+        $translatedTexts = explode($separator, $translateText);
+
+        $translatedIndex = 0;
+
         // Iterate questions to add translations
         foreach ($questions as $i => $question) {
 
             // Iterate over choices
             foreach ($question['choices'] as $j => $choice) {
                 // Translate choice text
-                $questions[$i]['choices'][$j]['text'] = $translator->translate($choice['text']);
+                $questions[$i]['choices'][$j]['text'] = $translatedTexts[$translatedIndex];
+                $translatedIndex++;
             }
             // Translate question text
-            $questions[$i]['text'] = $translator->translate($question['text']);
+            $questions[$i]['text'] = $translatedTexts[$translatedIndex];
+            $translatedIndex++;
         }
 
         return response()->json($questions, Response::HTTP_OK);
